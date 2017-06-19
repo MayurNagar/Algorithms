@@ -1,1 +1,43 @@
+Str = input()
 
+# converting string into format so that even length palindrom too can be identified
+def convertString(str):
+	s = ""
+	for i in range(len(str)):
+		s += "#" + str[i:i+1]
+
+	s += "#"
+	return s
+
+# method calculating Palindrome
+def longestPalindromicSubString(str):
+	c = 0
+	r = 0
+	Q = convertString(str)
+	size = len(Q)	
+	P = [0] * ( size )
+  
+	for i in range(len(Q)):
+  
+    # Left mirror of the current ith position
+		iMirror = c - (i - c)
+
+		if r > i:
+			P[i] = min(r-i,P[iMirror])
+
+		while i + 1 + P[i] < size and Q[i + 1 + P[i]] == Q[i - 1 - P[i]]:
+					P[i] += 1
+
+		if i + P[i] > r:
+			c = i
+			r = i + P[i]
+
+	max_length = max(P)
+	index = P.index(max_length) - max_length
+	if index<0:
+		index = 0
+	ans = [ Q[i] for i in range(index,index+2*max_length) if Q[i]!='#']
+	return "".join(ans)
+
+a = longestPalindromicSubString(Str)
+print(a)
